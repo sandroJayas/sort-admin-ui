@@ -9,27 +9,6 @@ import { useCreateStorageLocation } from "@/hooks/useCreateStorageLocation";
 import { CreateStorageLocationRequest } from "@/types/storage-location";
 
 const Dashboard = () => {
-  const { data, isLoading, error } = useStorageLocations();
-  const { mutate, isPending } = useCreateStorageLocation();
-
-  const onSubmit = () => {
-    const data = {
-      name: "fist-location",
-      address: "some address in new york",
-      capacity: 1000,
-    } as CreateStorageLocationRequest;
-
-    mutate(data, {
-      onSuccess: () => {
-        console.log("Location created successfully");
-      },
-      onError: (error) => {
-        console.log(error);
-      },
-    });
-  };
-
-  console.log(data);
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

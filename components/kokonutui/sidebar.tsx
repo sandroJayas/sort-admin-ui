@@ -15,6 +15,7 @@ import {
   HelpCircle,
   Menu,
   Factory,
+  Calendar,
 } from "lucide-react";
 
 import { Home } from "lucide-react";
@@ -94,8 +95,8 @@ export default function Sidebar() {
                   <NavItem href="/locations" icon={Building2}>
                     Locations
                   </NavItem>
-                  <NavItem href="#" icon={Folder}>
-                    Projects
+                  <NavItem href="/slots" icon={Calendar}>
+                    Slots
                   </NavItem>
                 </div>
               </div>
