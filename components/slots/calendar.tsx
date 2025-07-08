@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import UpdateSlotModal from "./update-slot-modal";
+import DaySlotsModal from "./day-slots-modal";
 import {
   SlotAvailabilityResponse,
   SlotResponse,
@@ -42,7 +43,9 @@ export default function Calendar({
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState<string | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<SlotResponse | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedDay, setSelectedDay] = useState<Date | null>(null);
+  const [isDaySlotsModalOpen, setIsDaySlotsModalOpen] = useState(false);
   const calendarRef = useRef<HTMLDivElement>(null);
 
   const slots = data?.slots || [];
@@ -172,26 +175,47 @@ export default function Calendar({
   const handleSlotClick = (slot: SlotResponse, event: React.MouseEvent) => {
     event.stopPropagation(); // Prevent day selection
     setSelectedSlot(slot);
-    setIsModalOpen(true);
+    setIsUpdateModalOpen(true);
   };
 
-  const handleModalClose = () => {
-    setIsModalOpen(false);
+  const handleUpdateModalClose = () => {
+    setIsUpdateModalOpen(false);
     setSelectedSlot(null);
+  };
+
+  const handleDaySlotsModalClose = () => {
+    setIsDaySlotsModalOpen(false);
+    setSelectedDay(null);
   };
 
   const handleUpdateSlot = (slotId: string, data: UpdateSlotRequest) => {
     onUpdateSlot?.(slotId, data);
-    handleModalClose();
+    handleUpdateModalClose();
   };
 
   const handleDeleteSlot = (slotId: string) => {
     onDeleteSlot?.(slotId);
-    handleModalClose();
+    handleUpdateModalClose();
+  };
+
+  const handleDaySlotClick = (slot: SlotResponse) => {
+    // Close day slots modal and open update modal
+    setIsDaySlotsModalOpen(false);
+    setSelectedSlot(slot);
+    setIsUpdateModalOpen(true);
   };
 
   const handleMouseDown = (date: Date) => {
     if (!isCurrentMonth(date)) return;
+
+    const daySlots = getSlotsForDate(date);
+
+    // If the day has more than 3 slots, show the day slots modal
+    if (daySlots.length > 3) {
+      setSelectedDay(date);
+      setIsDaySlotsModalOpen(true);
+      return;
+    }
 
     const dateKey = formatDateKey(date);
 
@@ -374,10 +398,16 @@ export default function Calendar({
                     ${!isCurrentMonthDay ? "text-gray-300 cursor-not-allowed bg-gray-50" : "text-gray-900 hover:bg-gray-50 bg-white"}
                     ${isSelectedDay && isCurrentMonthDay ? "border-blue-500 bg-blue-50" : "border-gray-200"}
                     ${isTodayDay && !isSelectedDay ? "border-gray-400 bg-gray-100" : ""}
+                    ${daySlots.length > 3 ? "hover:border-purple-300" : ""}
                   `}
                   onMouseDown={() => handleMouseDown(date)}
                   onMouseEnter={() => handleMouseEnter(date)}
                   onMouseUp={() => handleMouseUp(date)}
+                  title={
+                    daySlots.length > 3
+                      ? `Click to view all ${daySlots.length} slots`
+                      : ""
+                  }
                 >
                   {/* Date number */}
                   <div
@@ -411,8 +441,8 @@ export default function Calendar({
                         </div>
                       ))}
                       {daySlots.length > 3 && (
-                        <div className="text-xs text-gray-500 text-center">
-                          +{daySlots.length - 3} more
+                        <div className="text-xs text-purple-600 text-center cursor-pointer hover:text-purple-800">
+                          +{daySlots.length - 3} more (click to view)
                         </div>
                       )}
                     </div>
@@ -435,12 +465,21 @@ export default function Calendar({
       {/* Update Slot Modal */}
       <UpdateSlotModal
         slot={selectedSlot}
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
+        isOpen={isUpdateModalOpen}
+        onClose={handleUpdateModalClose}
         onUpdate={handleUpdateSlot}
         onDelete={handleDeleteSlot}
         isUpdating={isUpdatingSlot}
         isDeleting={isDeletingSlot}
+      />
+
+      {/* Day Slots Modal */}
+      <DaySlotsModal
+        date={selectedDay}
+        slots={selectedDay ? getSlotsForDate(selectedDay) : []}
+        isOpen={isDaySlotsModalOpen}
+        onClose={handleDaySlotsModalClose}
+        onSlotClick={handleDaySlotClick}
       />
     </>
   );
