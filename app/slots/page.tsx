@@ -91,7 +91,7 @@ const Page = () => {
   };
 
   return (
-    <Layout>
+    <Layout page={"slots"}>
       <div className="flex gap-4 p-4">
         <div className="flex-1">
           <Calendar

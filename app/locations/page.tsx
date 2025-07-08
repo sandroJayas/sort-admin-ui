@@ -158,7 +158,7 @@ const Page = () => {
   };
 
   return (
-    <Layout>
+    <Layout page={"locations"}>
       <div className="space-y-4">
         <div className="bg-white dark:bg-[#0F0F12] rounded-xl p-6 flex flex-col items-start justify-start border border-gray-200 dark:border-[#1F1F23]">
           {isLoading ? (

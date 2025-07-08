@@ -1,11 +1,10 @@
-import React from 'react';
+import React from "react";
 import Dashboard from "@/components/kokonutui/dashboard";
 import Layout from "@/components/kokonutui/layout";
 
-
 const Page = () => {
   return (
-    <Layout>
+    <Layout page={"dashboard"}>
       <Dashboard />
     </Layout>
   );
