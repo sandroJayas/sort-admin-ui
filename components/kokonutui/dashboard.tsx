@@ -4,9 +4,6 @@ import { Calendar, CreditCard, Wallet } from "lucide-react";
 import List01 from "@/components/kokonutui/list-01";
 import List02 from "@/components/kokonutui/list-02";
 import List03 from "@/components/kokonutui/list-03";
-import { useStorageLocations } from "@/hooks/useStorageLocations";
-import { useCreateStorageLocation } from "@/hooks/useCreateStorageLocation";
-import { CreateStorageLocationRequest } from "@/types/storage-location";
 
 const Dashboard = () => {
   return (

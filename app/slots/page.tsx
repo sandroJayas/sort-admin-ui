@@ -5,11 +5,11 @@ import Layout from "@/components/kokonutui/layout";
 import type { CreateBatchSlotsRequest, UpdateSlotRequest } from "@/types/slot";
 import Calendar from "@/components/slots/calendar";
 import SlotForm from "@/components/slots/slot-form";
-import { useCreateBatchSlots } from "@/hooks/useCreateBatchSlots";
-import { useUpdateSlot } from "@/hooks/useUpdateSlot";
-import { useDeleteSlot } from "@/hooks/useDeleteSlot";
+import { useCreateBatchSlots } from "@/hooks/slot/useCreateBatchSlots";
+import { useUpdateSlot } from "@/hooks/slot/useUpdateSlot";
+import { useDeleteSlot } from "@/hooks/slot/useDeleteSlot";
 import { toast } from "sonner";
-import { useSlots } from "@/hooks/useSlots";
+import { useSlots } from "@/hooks/slot/useSlots";
 
 const Page = () => {
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);

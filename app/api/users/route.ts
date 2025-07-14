@@ -1,24 +1,21 @@
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { NextRequest, NextResponse } from "next/server";
 
-interface RouteParams {
-  id: string;
-}
-
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<RouteParams> },
-) {
+export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions);
-  const { id } = await params;
 
   if (!session?.accessToken) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // Get query parameters
+  const searchParams = req.nextUrl.searchParams;
+  const page = searchParams.get("page") || "1";
+  const limit = searchParams.get("limit") || "20";
+
   const res = await fetch(
-    `${process.env.STORAGE_SERVICE_URL}/admin/locations/${id}/stats`,
+    `${process.env.USER_SERVICE_URL}/admin/users?page=${page}&limit=${limit}`,
     {
       headers: {
         Authorization: `Bearer ${session.accessToken}`,

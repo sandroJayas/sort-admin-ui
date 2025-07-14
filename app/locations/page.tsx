@@ -2,10 +2,10 @@
 import React, { useState } from "react";
 import Layout from "@/components/kokonutui/layout";
 import { ArrowRight, Building2, Calendar, PlusIcon } from "lucide-react";
-import { useStorageLocations } from "@/hooks/useStorageLocations";
-import { useCreateStorageLocation } from "@/hooks/useCreateStorageLocation";
-import { useUpdateStorageLocation } from "@/hooks/useUpdateStorageLocation";
-import { useDeleteStorageLocation } from "@/hooks/useDeleteStorageLocation";
+import { useStorageLocations } from "@/hooks/location/useStorageLocations";
+import { useCreateStorageLocation } from "@/hooks/location/useCreateStorageLocation";
+import { useUpdateStorageLocation } from "@/hooks/location/useUpdateStorageLocation";
+import { useDeleteStorageLocation } from "@/hooks/location/useDeleteStorageLocation";
 import { cn, stringToDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {

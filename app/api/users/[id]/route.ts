@@ -1,6 +1,6 @@
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { NextRequest, NextResponse } from "next/server";
 
 interface RouteParams {
   id: string;
@@ -17,14 +17,11 @@ export async function GET(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const res = await fetch(
-    `${process.env.STORAGE_SERVICE_URL}/admin/locations/${id}/stats`,
-    {
-      headers: {
-        Authorization: `Bearer ${session.accessToken}`,
-      },
+  const res = await fetch(`${process.env.USER_SERVICE_URL}/admin/users/${id}`, {
+    headers: {
+      Authorization: `Bearer ${session.accessToken}`,
     },
-  );
+  });
 
   const data = await res.json();
 

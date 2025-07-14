@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  BarChart2,
   Receipt,
   Building2,
   CreditCard,
@@ -33,7 +32,7 @@ export default function Sidebar() {
     children,
   }: {
     href: string;
-    icon: any;
+    icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
     children: React.ReactNode;
   }) {
     return (
@@ -86,8 +85,8 @@ export default function Sidebar() {
                   <NavItem href="#" icon={Home}>
                     Dashboard
                   </NavItem>
-                  <NavItem href="#" icon={BarChart2}>
-                    Analytics
+                  <NavItem href="/users" icon={Users2}>
+                    Users
                   </NavItem>
                   <NavItem href="/locations" icon={Building2}>
                     Locations

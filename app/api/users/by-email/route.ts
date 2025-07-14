@@ -1,28 +1,25 @@
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { NextRequest, NextResponse } from "next/server";
 
-interface RouteParams {
-  id: string;
-}
-
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<RouteParams> },
-) {
+export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
-  const { id } = await params;
 
   if (!session?.accessToken) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const body = await req.json();
+
   const res = await fetch(
-    `${process.env.STORAGE_SERVICE_URL}/admin/locations/${id}/stats`,
+    `${process.env.USER_SERVICE_URL}/admin/users/by-email`,
     {
+      method: "POST",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${session.accessToken}`,
       },
+      body: JSON.stringify(body),
     },
   );
 
