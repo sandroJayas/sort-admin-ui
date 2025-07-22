@@ -31,6 +31,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useApproveOrder } from "@/hooks/order/useApproveOrder";
+import { toast } from "sonner";
+import { useRejectOrder } from "@/hooks/order/useRejectOrder";
 
 interface OrderDetailsPageProps {
   params: Promise<{ id: string }>;
@@ -39,7 +42,47 @@ interface OrderDetailsPageProps {
 const Page = ({ params }: OrderDetailsPageProps) => {
   const { id } = use(params);
   const { data: order, error, isLoading } = useOrder(id);
+  const { mutate: approveOrder, isPending: isApproving } = useApproveOrder();
+  const { mutate: rejectOrder, isPending: isRejecting } = useRejectOrder();
   const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
+
+  const handleApprove = (orderId: string) => {
+    approveOrder(
+      {
+        id: orderId,
+        data: {
+          notes: "Order approved by admin",
+        },
+      },
+      {
+        onSuccess: () => {
+          toast.success("Order approved successfully");
+        },
+        onError: (error) => {
+          toast.error(error.message);
+        },
+      },
+    );
+  };
+
+  const handleReject = (orderId: string) => {
+    rejectOrder(
+      {
+        id: orderId,
+        data: {
+          reason: "Reject",
+        },
+      },
+      {
+        onSuccess: () => {
+          toast.success("Order rejected");
+        },
+        onError: (error: Error) => {
+          toast.error(error.message);
+        },
+      },
+    );
+  };
 
   if (isLoading) {
     return (
@@ -172,9 +215,9 @@ const Page = ({ params }: OrderDetailsPageProps) => {
                   <div className="flex items-center gap-3">
                     <Button
                       onClick={() => {
-                        console.log("Approving order:", order.id);
-                        // TODO: Implement actual approval logic
+                        handleApprove(order.id);
                       }}
+                      disabled={isApproving}
                       className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 px-6 py-2"
                     >
                       <CheckCircleIcon className="h-4 w-4 mr-2" />
@@ -236,10 +279,10 @@ const Page = ({ params }: OrderDetailsPageProps) => {
                           </Button>
                           <Button
                             onClick={() => {
-                              console.log("Rejecting order:", order.id);
+                              handleReject(order.id);
                               setIsRejectDialogOpen(false);
-                              // TODO: Implement actual rejection logic
                             }}
+                            disabled={isRejecting}
                             className="bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-600 hover:to-rose-600 text-white flex-1"
                           >
                             <XCircleIcon className="h-4 w-4 mr-2" />

@@ -3,10 +3,10 @@ import { authOptions } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 interface RouteParams {
-  orderId: string;
+  id: string;
 }
 
-// GET /api/orders/:orderId - Get single order
+// GET /api/orders/:id - Get single order
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<RouteParams> },
@@ -17,10 +17,10 @@ export async function GET(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { orderId } = await params;
+  const { id } = await params;
 
   const res = await fetch(
-    `${process.env.STORAGE_SERVICE_URL}/admin/orders/${orderId}`,
+    `${process.env.STORAGE_SERVICE_URL}/admin/orders/${id}`,
     {
       headers: {
         Authorization: `Bearer ${session.accessToken}`,
@@ -35,7 +35,7 @@ export async function GET(
   });
 }
 
-// PATCH /api/orders/:orderId - Update order
+// PATCH /api/orders/:id - Update order
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<RouteParams> },
@@ -47,10 +47,10 @@ export async function PATCH(
   }
 
   const body = await req.json();
-  const { orderId } = await params;
+  const { id } = await params;
 
   const res = await fetch(
-    `${process.env.STORAGE_SERVICE_URL}/admin/orders/${orderId}`,
+    `${process.env.STORAGE_SERVICE_URL}/admin/orders/${id}`,
     {
       method: "PATCH",
       headers: {
