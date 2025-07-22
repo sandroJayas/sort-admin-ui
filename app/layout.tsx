@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sort Admin",
+  title: "Sort Admin Dashboard",
   description: "Sort Admin App",
 };
 
