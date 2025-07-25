@@ -47,7 +47,7 @@ export function PhotoGallery({ photos }: PhotoGalleryProps) {
                 }}
               >
                 <Image
-                  src={"/placeholder.svg"}
+                  src={photo}
                   alt={`Order photo ${index + 1}`}
                   fill
                   className="object-cover group-hover:scale-110 transition-transform duration-300"
