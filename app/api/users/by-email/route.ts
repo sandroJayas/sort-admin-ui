@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
 
   const res = await fetch(
-    `${process.env.USER_SERVICE_URL}/admin/users/by-email`,
+    `${process.env.STORAGE_SERVICE_URL}/admin/users/by-email`,
     {
       method: "POST",
       headers: {

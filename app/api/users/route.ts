@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
   const limit = searchParams.get("limit") || "20";
 
   const res = await fetch(
-    `${process.env.USER_SERVICE_URL}/admin/users?page=${page}&limit=${limit}`,
+    `${process.env.STORAGE_SERVICE_URL}/admin/users?page=${page}&limit=${limit}`,
     {
       headers: {
         Authorization: `Bearer ${session.accessToken}`,
