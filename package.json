@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "local-services": "STORAGE_SERVICE_URL=http://localhost:8080/api/v1 USER_SERVICE_URL=http://localhost:8081/api/v1 next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
