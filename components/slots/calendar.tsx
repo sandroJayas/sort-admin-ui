@@ -50,6 +50,14 @@ export default function Calendar({
 
   const slots = data?.slots || [];
 
+  // Helper function to format date to YYYY-MM-DD in local timezone
+  const formatDateToLocal = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   // Get the first day of the month and calculate calendar grid
   const firstDayOfMonth = new Date(
     currentDate.getFullYear(),
@@ -110,10 +118,12 @@ export default function Calendar({
   };
 
   const getSlotsForDate = (date: Date): SlotResponse[] => {
-    const dateStr = date.toISOString().split("T")[0];
+    const dateStr = formatDateToLocal(date);
     return slots.filter((slot) => {
-      const slotDate = new Date(slot.start_time).toISOString().split("T")[0];
-      return slotDate === dateStr;
+      // Parse the slot date in local timezone
+      const slotDate = new Date(slot.start_time);
+      const slotDateStr = formatDateToLocal(slotDate);
+      return slotDateStr === dateStr;
     });
   };
 

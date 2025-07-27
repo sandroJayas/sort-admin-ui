@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -40,11 +40,11 @@ export default function UpdateSlotModal({
   );
 
   // Update local state when slot changes
-  useState(() => {
+  useEffect(() => {
     if (slot) {
       setMaxCapacity(slot.max_capacity);
     }
-  });
+  }, [slot]);
 
   const formatTime = (isoDateTime: string): string => {
     const date = new Date(isoDateTime);
@@ -179,9 +179,12 @@ export default function UpdateSlotModal({
               type="number"
               min="1"
               value={maxCapacity}
-              onChange={(e) =>
-                setMaxCapacity(Number.parseInt(e.target.value) || 1)
-              }
+              onChange={(e) => {
+                const value = parseInt(e.target.value);
+                if (!isNaN(value) && value >= 1) {
+                  setMaxCapacity(value);
+                }
+              }}
               disabled={isUpdating}
             />
             <p className="text-xs text-gray-500">

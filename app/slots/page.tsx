@@ -2,7 +2,11 @@
 
 import { useMemo, useState } from "react";
 import Layout from "@/components/kokonutui/layout";
-import type { CreateBatchSlotsRequest, UpdateSlotRequest } from "@/types/slot";
+import type {
+  CreateBatchSlotsRequest,
+  UpdateSlotRequest,
+  AllSlotsRequest,
+} from "@/types/slot";
 import Calendar from "@/components/slots/calendar";
 import SlotForm from "@/components/slots/slot-form";
 import { useCreateBatchSlots } from "@/hooks/slot/useCreateBatchSlots";
@@ -23,8 +27,19 @@ const Page = () => {
     setSelectedDates(dates);
   };
 
+  // Helper function to create a date at midnight in local timezone as ISO string
+  const createLocalMidnightISO = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    // Create a date string at midnight local time
+    // Using T00:00:00.000Z format expected by backend
+    return `${year}-${month}-${day}T00:00:00.000Z`;
+  };
+
   // Calculate the date range for the current calendar view
-  const dateRange = useMemo(() => {
+  const dateRange = useMemo((): AllSlotsRequest => {
     const firstDayOfMonth = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth(),
@@ -41,8 +56,8 @@ const Page = () => {
     endDate.setDate(endDate.getDate() + 41); // 42 days - 1 (since we start from day 0)
 
     return {
-      start_date: startDate.toISOString(),
-      end_date: endDate.toISOString(),
+      start_date: createLocalMidnightISO(startDate),
+      end_date: createLocalMidnightISO(endDate),
     };
   }, [currentDate]);
 

@@ -28,12 +28,35 @@ export default function SlotForm({
   const [maxCapacity, setMaxCapacity] = useState<number>(1);
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
 
+  // Helper function to format date to YYYY-MM-DD at midnight local time
+  const formatDateToLocalISO = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    // Create a date string at midnight local time
+    return `${year}-${month}-${day}T00:00:00.000Z`;
+  };
+
   const getDateRange = (dates: Date[]) => {
     if (dates.length === 0) return { start: "", end: "" };
 
     const sortedDates = [...dates].sort((a, b) => a.getTime() - b.getTime());
-    const start = sortedDates[0].toISOString();
-    const end = sortedDates[sortedDates.length - 1].toISOString();
+
+    // Use local date formatting to avoid timezone shifts
+    const start = formatDateToLocalISO(sortedDates[0]);
+
+    // For the end date, if it's a single day selection, add one day
+    // Otherwise use the last selected date
+    let endDate: Date;
+    if (sortedDates.length === 1) {
+      endDate = new Date(sortedDates[0]);
+      endDate.setDate(endDate.getDate() + 1);
+    } else {
+      endDate = sortedDates[sortedDates.length - 1];
+    }
+
+    const end = formatDateToLocalISO(endDate);
 
     return { start, end };
   };
@@ -56,6 +79,16 @@ export default function SlotForm({
   const handleSubmit = () => {
     const request = generateRequest();
     onRequestChange(request);
+  };
+
+  const formatDisplayDate = (dateStr: string): string => {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
   };
 
   const request = generateRequest();
@@ -120,8 +153,13 @@ export default function SlotForm({
               selected
               {selectedDates.length > 0 && (
                 <div className="mt-1">
-                  {getDateRange(selectedDates).start} to{" "}
-                  {getDateRange(selectedDates).end}
+                  {formatDisplayDate(getDateRange(selectedDates).start)} to{" "}
+                  {formatDisplayDate(getDateRange(selectedDates).end)}
+                  {selectedDates.length === 1 && (
+                    <span className="text-xs text-gray-500 block mt-1">
+                      (Single day selection)
+                    </span>
+                  )}
                 </div>
               )}
             </div>
