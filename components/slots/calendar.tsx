@@ -434,6 +434,9 @@ export default function Calendar({
                           key={slot.id}
                           className={`text-xs px-1 py-0.5 rounded border z-50 cursor-pointer transition-colors ${getSlotTypeColor(slot.slot_type)}`}
                           onClick={(e) => handleSlotClick(slot, e)}
+                          onMouseDown={(e) => e.stopPropagation()}
+                          onMouseEnter={(e) => e.stopPropagation()}
+                          onMouseUp={(e) => e.stopPropagation()}
                           title="Click to edit slot"
                         >
                           <div className="flex items-center justify-between">
@@ -451,7 +454,12 @@ export default function Calendar({
                         </div>
                       ))}
                       {daySlots.length > 3 && (
-                        <div className="text-xs text-purple-600 text-center cursor-pointer hover:text-purple-800">
+                        <div
+                          className="text-xs text-purple-600 text-center cursor-pointer hover:text-purple-800"
+                          onMouseDown={(e) => e.stopPropagation()}
+                          onMouseEnter={(e) => e.stopPropagation()}
+                          onMouseUp={(e) => e.stopPropagation()}
+                        >
                           +{daySlots.length - 3} more (click to view)
                         </div>
                       )}
