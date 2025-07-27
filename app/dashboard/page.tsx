@@ -32,7 +32,7 @@ import {
 import { useRouter } from "next/navigation";
 import Layout from "@/components/kokonutui/layout";
 import { OrderStatus, OrderType, fromISODateString } from "@/types/order";
-import { usePendingOrders } from "@/hooks/order/usePendingOrders";
+import { useOrdersByStatus } from "@/hooks/order/useOrdersByStatus";
 
 export default function PendingOrdersPage() {
   const router = useRouter();
@@ -40,7 +40,9 @@ export default function PendingOrdersPage() {
   const [pageSize, setPageSize] = useState(20);
 
   // Fetch pending orders
-  const { data, isLoading, error, refetch } = usePendingOrders();
+  const { data, isLoading, error, refetch } = useOrdersByStatus(
+    OrderStatus.PENDING,
+  );
 
   const handleOrderClick = (orderId: string) => {
     router.push(`/orders/${orderId}`);
