@@ -34,6 +34,8 @@ import {
 import { useApproveOrder } from "@/hooks/order/useApproveOrder";
 import { toast } from "sonner";
 import { useRejectOrder } from "@/hooks/order/useRejectOrder";
+import IntakeModal from "@/components/box/intake-modal";
+import { OrderStatus } from "@/types/order";
 
 interface OrderDetailsPageProps {
   params: Promise<{ id: string }>;
@@ -211,7 +213,7 @@ const Page = ({ params }: OrderDetailsPageProps) => {
                 >
                   {order.status.toUpperCase()}
                 </Badge>
-                {order.status.toLowerCase() === "pending" && (
+                {order.status.toLowerCase() === OrderStatus.PENDING ? (
                   <div className="flex items-center gap-3">
                     <Button
                       onClick={() => {
@@ -292,6 +294,8 @@ const Page = ({ params }: OrderDetailsPageProps) => {
                       </DialogContent>
                     </Dialog>
                   </div>
+                ) : (
+                  <IntakeModal orderId={id} />
                 )}
               </div>
             </div>
