@@ -197,6 +197,7 @@ export interface OperationSummary {
   operation_type: string;
   status: string;
   scheduled_date?: string;
+  notes?: string;
 }
 
 // ==================== BOX TYPES ====================

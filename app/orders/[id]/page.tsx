@@ -502,12 +502,17 @@ const Page = ({ params }: OrderDetailsPageProps) => {
                                 .toUpperCase()}
                             </p>
                             <p className="text-sm text-muted-foreground font-mono">
-                              ID: {operation.id.slice(0, 8)}...
+                              ID: {operation.id}
                             </p>
                             {operation.scheduled_date && (
                               <p className="text-sm text-muted-foreground">
                                 Scheduled:{" "}
                                 {formatDate(operation.scheduled_date)}
+                              </p>
+                            )}
+                            {operation.notes && (
+                              <p className="text-sm text-muted-foreground">
+                                Notes: {operation.notes}
                               </p>
                             )}
                           </div>
